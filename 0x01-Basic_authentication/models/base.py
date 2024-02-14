@@ -12,7 +12,7 @@ TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"
 DATA = {}
 
 
-class Base():
+class Base:
     """ Base class
     """
 

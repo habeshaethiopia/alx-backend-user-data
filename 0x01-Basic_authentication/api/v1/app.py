@@ -28,6 +28,22 @@ if auth == "auth":
                 abort(403)
 
 
+if auth == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
+
+    @app.before_request
+    def before_request():
+        """before_request"""
+        if BasicAuth().require_auth(
+            request.path,
+            ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"],
+        ):
+            if BasicAuth().authorization_header(request) is None:
+                abort(401)
+            if BasicAuth().current_user(request) is None:
+                abort(403)
+
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """Not found handler"""
