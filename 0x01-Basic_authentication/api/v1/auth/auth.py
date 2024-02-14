@@ -13,6 +13,9 @@ class Auth:
         """require_auth"""
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
+        for p in excluded_paths:
+            if p.endswith("*") and path.startswith(p[:-1]):
+                return False
         if path[-1] != "/":
             path += "/"
         if path in excluded_paths:
