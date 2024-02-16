@@ -21,6 +21,7 @@ if auth == "basic_auth":
     @app.before_request
     def before_request():
         """before_request"""
+        request.current_user = auth.current_user(request)
         if auth.require_auth(
             request.path,
             ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"],
@@ -39,6 +40,7 @@ if auth == "auth":
     @app.before_request
     def before_request():
         """before_request"""
+        request.current_user = auth.current_user(request)
         if auth.require_auth(
             request.path,
             ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"],

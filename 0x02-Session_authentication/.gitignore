@@ -1,0 +1,6 @@
+.venv
+__MACOSX
+SimpleAPI
+env
+.DS_Store
+__pycache__
