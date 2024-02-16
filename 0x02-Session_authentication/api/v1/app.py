@@ -51,6 +51,25 @@ if auth == "auth":
                 abort(403)
 
 
+if auth == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
+
+    auth = SessionAuth()
+
+    @app.before_request
+    def before_request():
+        """before_request"""
+        request.current_user = auth.current_user(request)
+        if auth.require_auth(
+            request.path,
+            ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"],
+        ):
+            if auth.authorization_header(request) is None:
+                abort(401)
+            if auth.current_user(request) is None:
+                abort(403)
+
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """Not found handler"""
