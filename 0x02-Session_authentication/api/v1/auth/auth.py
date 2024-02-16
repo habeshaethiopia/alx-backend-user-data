@@ -4,6 +4,7 @@ auth module for the API
 """
 from flask import jsonify, abort, request
 from typing import List, TypeVar
+import uuid
 
 
 class Auth:
@@ -31,3 +32,7 @@ class Auth:
     def current_user(self, request=None) -> TypeVar("User"):
         """current_user"""
         return None
+
+    def create_session(self, user_id: str = None) -> str:
+        """create_session"""
+        return str(uuid.uuid4())
