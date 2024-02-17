@@ -13,7 +13,8 @@ class SessionExpAuth(SessionAuth):
         """Constructor"""
         self.session_duration = 0
         try:
-            self.session_duration = int(os.getenv("SESSION_DURATION"))
+            self.session_duration = int(os.getenv(
+                "SESSION_DURATION"))
         except Exception:
             pass
 
@@ -39,6 +40,7 @@ class SessionExpAuth(SessionAuth):
             return session_dict.get("user_id")
         if "created_at" not in session_dict:
             return None
-        if (time.time() - session_dict.get("created_at")) > self.session_duration:
+        if (time.time() - session_dict.get(
+            "created_at")) > self.session_duration:
             return None
         return session_dict.get("user_id")
