@@ -31,19 +31,14 @@ class SessionExpAuth(SessionAuth):
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """user_id_for_session_id"""
         if session_id is None:
-            print("session_id is None")
             return None
         session_dict = self.user_id_by_session_id.get(session_id)
         if session_dict is None:
             return None
         if self.session_duration <= 0:
-            print("session_duration <= 0")
             return session_dict.get("user_id")
         if "created_at" not in session_dict:
-            print("created_at not in session_dict")
             return None
         if (time.time() - session_dict.get("created_at")) > self.session_duration:
-            print("time.time() - session_dict.get(created_at) > self.session_duration")
             return None
-        # print("returning session_dict.get(user_id)",session_dict.get("user_id"))
         return session_dict.get("user_id")

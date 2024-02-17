@@ -37,32 +37,35 @@ if auth == "session_db_auth":
     from api.v1.auth.session_db_auth import SessionDBAuth
 
     auth = SessionDBAuth()
-if auth:
 
-    @app.before_request
-    def before_request():
-        """before_request"""
-        request.current_user = auth.current_user(request)
-        if auth.require_auth(
-            request.path,
-            [
-                "/api/v1/auth_session/login/",
-                "/api/v1/status/",
-                "/api/v1/unauthorized/",
-                "/api/v1/forbidden/",
-            ],
+
+@app.before_request
+def before_request():
+    """before_request"""
+    if auth is None:
+        return
+    request.current_user = auth.current_user(request)
+    print("request.current_user", request.current_user)
+    if auth.require_auth(
+        request.path,
+        [
+            "/api/v1/auth_session/login/",
+            "/api/v1/status/",
+            "/api/v1/unauthorized/",
+            "/api/v1/forbidden/",
+        ],
+    ):
+        # if auth.authorization_header(request) is None:
+        #     abort(401)
+        if (
+            auth.authorization_header(request) is None
+            and auth.session_cookie(request) is None
         ):
-            # if auth.authorization_header(request) is None:
-            #     abort(401)
-            if (
-                auth.authorization_header(request) is None
-                and auth.session_cookie(request) is None
-            ):
-                # print("1")
-                abort(401)
-            if auth.current_user(request) is None:
-                # print("3")
-                abort(403)
+            # print("1")
+            abort(401)
+        if auth.current_user(request) is None:
+            # print("3")
+            abort(403)
 
 
 @app.errorhandler(404)
