@@ -34,6 +34,7 @@ class SessionAuth(Auth):
         from models.user import User
 
         return User.get(user_id)
+
     def destroy_session(self, request=None):
         """destroy_session"""
         if request is None:
