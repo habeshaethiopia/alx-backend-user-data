@@ -13,72 +13,32 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = os.getenv("AUTH_TYPE")
 
-if auth == "basic_auth":
-    from api.v1.auth.basic_auth import BasicAuth
-
-    auth = BasicAuth()
-
-    @app.before_request
-    def before_request():
-        """before_request"""
-        request.current_user = auth.current_user(request)
-        if auth.require_auth(
-            request.path,
-            [
-                "/api/v1/auth_session/login/",
-                "/api/v1/status/",
-                "/api/v1/unauthorized/",
-                "/api/v1/forbidden/",
-            ],
-        ):
-            # if auth.authorization_header(request) is None:
-            #     abort(401)
-            if (
-                auth.authorization_header(request) is None
-                and auth.session_cookie(request) is None
-            ):
-                abort(401)
-            if auth.authorization_header(request) is None:
-                abort(401)
-            if auth.current_user(request) is None:
-                abort(403)
-
-
 if auth == "auth":
     from api.v1.auth.auth import Auth
 
     auth = Auth()
-
-    @app.before_request
-    def before_request():
-        """before_request"""
-        request.current_user = auth.current_user(request)
-        if auth.require_auth(
-            request.path,
-            [
-                "/api/v1/auth_session/login/",
-                "/api/v1/status/",
-                "/api/v1/unauthorized/",
-                "/api/v1/forbidden/",
-            ],
-        ):
-
-            # if auth.authorization_header(request) is None:
-            #     abort(401)
-            if (
-                auth.authorization_header(request) is None
-                and auth.session_cookie(request) is None
-            ):
-                abort(401)
-            if auth.current_user(request) is None:
-                abort(403)
-
 
 if auth == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
 
     auth = SessionAuth()
 
+if auth == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
+
+    auth = BasicAuth()
+
+if auth == "session_exp_auth":
+    from api.v1.auth.session_exp_auth import SessionExpAuth
+
+    auth = SessionExpAuth()
+
+if auth == "session_db_auth":
+    from api.v1.auth.session_db_auth import SessionDBAuth
+
+    auth = SessionDBAuth()
+if auth:
+
     @app.before_request
     def before_request():
         """before_request"""
@@ -98,9 +58,10 @@ if auth == "session_auth":
                 auth.authorization_header(request) is None
                 and auth.session_cookie(request) is None
             ):
+                # print("1")
                 abort(401)
-
             if auth.current_user(request) is None:
+                # print("3")
                 abort(403)
 
 
