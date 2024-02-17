@@ -5,7 +5,7 @@ auth module for the API
 from flask import jsonify, abort, request
 from typing import List, TypeVar
 import os
-
+import uuid
 
 class Auth:
     """Auth class"""
@@ -28,10 +28,6 @@ class Auth:
         if request is None or "Authorization" not in request.headers:
             return None
         return request.headers["Authorization"]
-
-    def current_user(self, request=None) -> TypeVar("User"):
-        """current_user"""
-        return None
 
     def session_cookie(self, request=None):
         """session_cookie"""

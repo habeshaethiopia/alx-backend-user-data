@@ -30,7 +30,7 @@ class SessionAuth(Auth):
         """current_user"""
         session_id = self.session_cookie(request)
         user_id = self.user_id_for_session_id(session_id)
+
         from models.user import User
 
         return User.get(user_id)
-    
