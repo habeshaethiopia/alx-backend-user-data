@@ -33,3 +33,4 @@ class SessionAuth(Auth):
         from models.user import User
 
         return User.get(user_id)
+    
