@@ -31,10 +31,12 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, user) -> None:
+    def add_user(self, email,hashed_password) -> User:
         """Add a user to the database"""
+        user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user by a given attribute"""
