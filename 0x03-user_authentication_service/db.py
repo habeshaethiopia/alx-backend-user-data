@@ -25,7 +25,7 @@ class DB:
         self.__session = None
 
     @property
-    def _session(self) -> Session:
+    def __session(self) -> Session:
         """Memoized session object"""
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
@@ -35,14 +35,14 @@ class DB:
     def add_user(self, email, hashed_password) -> User:
         """Add a user to the database"""
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
+        self.__session.add(user)
+        self.__session.commit()
         return user
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user by a given attribute"""
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
+            user = self.__session.query(User).filter_by(**kwargs).first()
             if not user:
                 raise NoResultFound
             return user
@@ -58,4 +58,4 @@ class DB:
 
         for key, value in kwargs.items():
             setattr(user, key, value)
-        self._session.commit()
+        self.__session.commit()
