@@ -3,19 +3,16 @@
 
 import requests
 
-BASE_URL = 'http://localhost:5000'
+BASE_URL = "http://localhost:5000"
 EMAIL = "guillaume@holberton.io"
 PASSWD = "b4l0u"
 NEW_PASSWD = "t4rt1fl3tt3"
 
 
 def register_user(email: str, password: str) -> None:
-    """ Test for validating user registration """
-    data = {
-        "email": email,
-        "password": password
-    }
-    response = requests.post(f'{BASE_URL}/users', data=data)
+    """Test for validating user registration"""
+    data = {"email": email, "password": password}
+    response = requests.post(f"{BASE_URL}/users", data=data)
 
     msg = {"email": email, "message": "user created"}
 
@@ -24,23 +21,17 @@ def register_user(email: str, password: str) -> None:
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
-    """ Test for validating log in with wrong password """
-    data = {
-        "email": email,
-        "password": password
-    }
-    response = requests.post(f'{BASE_URL}/sessions', data=data)
+    """Test for validating log in with wrong password"""
+    data = {"email": email, "password": password}
+    response = requests.post(f"{BASE_URL}/sessions", data=data)
 
     assert response.status_code == 401
 
 
 def log_in(email: str, password: str) -> str:
-    """ Test for validating succesful log in """
-    data = {
-        "email": email,
-        "password": password
-    }
-    response = requests.post(f'{BASE_URL}/sessions', data=data)
+    """Test for validating succesful log in"""
+    data = {"email": email, "password": password}
+    response = requests.post(f"{BASE_URL}/sessions", data=data)
 
     msg = {"email": email, "message": "logged in"}
 
@@ -53,21 +44,17 @@ def log_in(email: str, password: str) -> str:
 
 
 def profile_unlogged() -> None:
-    """ Test for validating profile request without log in """
-    cookies = {
-        "session_id": ""
-    }
-    response = requests.get(f'{BASE_URL}/profile', cookies=cookies)
+    """Test for validating profile request without log in"""
+    cookies = {"session_id": ""}
+    response = requests.get(f"{BASE_URL}/profile", cookies=cookies)
 
     assert response.status_code == 403
 
 
 def profile_logged(session_id: str) -> None:
-    """ Test for validating profile request logged in """
-    cookies = {
-        "session_id": session_id
-    }
-    response = requests.get(f'{BASE_URL}/profile', cookies=cookies)
+    """Test for validating profile request logged in"""
+    cookies = {"session_id": session_id}
+    response = requests.get(f"{BASE_URL}/profile", cookies=cookies)
 
     msg = {"email": EMAIL}
 
@@ -76,11 +63,9 @@ def profile_logged(session_id: str) -> None:
 
 
 def log_out(session_id: str) -> None:
-    """ Test for validating log out endpoint """
-    cookies = {
-        "session_id": session_id
-    }
-    response = requests.delete(f'{BASE_URL}/sessions', cookies=cookies)
+    """Test for validating log out endpoint"""
+    cookies = {"session_id": session_id}
+    response = requests.delete(f"{BASE_URL}/sessions", cookies=cookies)
 
     msg = {"message": "Bienvenue"}
 
@@ -89,11 +74,9 @@ def log_out(session_id: str) -> None:
 
 
 def reset_password_token(email: str) -> str:
-    """ Test for validating password reset token """
-    data = {
-        "email": email
-    }
-    response = requests.post(f'{BASE_URL}/reset_password', data=data)
+    """Test for validating password reset token"""
+    data = {"email": email}
+    response = requests.post(f"{BASE_URL}/reset_password", data=data)
 
     assert response.status_code == 200
 
@@ -106,14 +89,18 @@ def reset_password_token(email: str) -> str:
     return reset_token
 
 
-def update_password(email: str, reset_token: str, new_password: str) -> None:
-    """ Test for validating password reset (update) """
+def update_password(
+    email: str,
+    reset_token: str,
+    new_password: str
+        ) -> None:
+    """Test for validating password reset (update)"""
     data = {
         "email": email,
         "reset_token": reset_token,
         "new_password": new_password
-    }
-    response = requests.put(f'{BASE_URL}/reset_password', data=data)
+        }
+    response = requests.put(f"{BASE_URL}/reset_password", data=data)
 
     msg = {"email": email, "message": "Password updated"}
 
